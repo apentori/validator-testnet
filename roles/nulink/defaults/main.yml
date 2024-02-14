@@ -1,0 +1,28 @@
+---
+nulink_service_name: 'nulink'
+nulink_path: '/docker/{{ nulink_service_name }}'
+nulink_user: '{{ lookup("env", "USER") }}'
+nulink_group: 'docker'
+# Container
+nulink_cont_name: 'nulink'
+nulink_cont_version: 'latest'
+nulink_cont_image_name: 'nulink/nulink:{{ nulink_cont_version }}'
+nulink_cont_port: 9151
+nulink_cont_vol_secrets: '{{ nulink_path }}/secrets'
+nulink_cont_vol_config: '{{ nulink_path }}/config'
+ # Keystore 
+nulink_keystore_filename: 'keystore-{{ nulink_operator_address | mandatory }}'
+# nulink_operator_address: ''
+#nulink_keystore_content: Content of the keystore
+#nulink_keystore_password: ChangeMeIfYouCare
+
+# Parameters
+nulink_config_eth_provider: 'https://data-seed-prebsc-2-s2.binance.org:8545'
+nulink_config_network: 'horus'
+nulink_config_payement_provider: 'https://data-seed-prebsc-2-s2.binance.org:8545'
+nulink_config_payement_network: 'bsc_testnet'
+nulink_config_max_gas_price: 10000000000
+
+
+# GETH
+geth_version: 'latest'

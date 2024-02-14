@@ -1,0 +1,16 @@
+---
+#vim: ft=yml
+version: '3.7'
+services:
+  app:
+    container_name: '{{ nulink_cont_name }}'
+    image: '{{ nulink_cont_image_name }}'
+    env_file: '{{ nulink_path }}/.env'
+    restart: 'always'
+    ports:
+      - '{{ nulink_cont_port }}:{{ nulink_cont_port }}'
+    volumes:
+      - '{{ nulink_cont_vol_secrets }}:/code'
+      - '{{ nulink_cont_vol_config }}:/home/circleci/.local/share/nulink'
+    command: |
+      nulink ursula run --no-block-until-ready

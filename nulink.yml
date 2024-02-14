@@ -1,0 +1,5 @@
+---
+- name: Run Nulink validator
+  hosts: nulink
+  roles:
+    - { role: 'nulink', tags: 'nulink' }

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#vim: ft=sh
+
+
+DESCRIPTION="This script generate validators keys for Nulink nodes"
+# see https://docs.nulink.org/products/stakers/nulink_worker/eth_account
+
+# Generate Ethereum keystore 
+docker run -it \
+  -v {{  nulink_cont_vol_secrets }}:/keystore \
+  ethereum/client-go:{{ geth_version }} \
+  account new --keystore /keystore
+
+echo "Please backup the file in {{nulink_cont_vol_secrets }}"
+
+chown -R {{ nulink_user }}:{{nulink_group}} {{ nulink_cont_vol_secrets }}
+
+echo "Enter Public address:"
+read eth_public_addr
+echo "Enter keystore filename: (ex UTC--2024-02-18T13-12-33.918829089Z--e4c1e2a7e64c509721f5515e287caa8549f9934e)"
+read eth_keystore_filename
+# Run Nulink to create Validator configuration
+docker run -it \
+  -v "{{ nulink_cont_vol_secrets }}:/code" \
+  -v "{{ nulink_cont_vol_config }}:/home/circleci/.local/share/nulink" \
+  {{ nulink_cont_image_name }} \
+  nulink ursula init \
+    --signer "keystore:///code/$eth_keystore_filename" \
+    --eth-provider {{ nulink_config_eth_provider }} \
+    --network {{ nulink_config_network }} \
+    --payment-provider {{ nulink_config_payement_provider }} \
+    --payment-network {{ nulink_config_payement_network }} \
+    --operator-address "$eth_public_addr" \
+    --max-gas-price {{ nulink_config_max_gas_price }} \
+    --rest-host {{ ansible_host }}

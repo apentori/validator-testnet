@@ -1,0 +1,5 @@
+[all]
+contabo-01 hostname=contabo-01.irotnep ansible_host=89.116.25.237
+
+[nulink]
+contabo-01

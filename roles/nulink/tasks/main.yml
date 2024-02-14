@@ -1,0 +1,33 @@
+---
+- name: 'Create Directories'
+  file:
+    dest: '{{ item }}'
+    state: 'directory'
+    owner: '{{ nulink_user }}'
+    group: '{{ nulink_group }}'
+    mode: 0775
+  with_items:
+    - '{{ nulink_path }}'
+    - '{{ nulink_cont_vol_secrets }}'
+    - '{{ nulink_cont_vol_config }}'
+
+- name: 'Create compose file: {{ nulink_cont_name }}'
+  template:
+    src: '{{ item }}.j2'
+    dest: '{{ nulink_path }}/{{ item }}'
+    owner: '{{ nulink_user }}'
+    group: '{{ nulink_group }}'
+    mode: 0764
+  with_items:
+    - 'docker-compose.yml'
+    - '.env'
+    - 'generate-validator-keys.sh'
+
+- name: 'Create container: {{ nulink_cont_name }}'
+  docker_compose:
+    project_src: '{{ nulink_path }}'
+    pull: true
+    state: 'present'
+    restarted: 'false'
+    recreate: 'smart'
+  when: nulink_account_created

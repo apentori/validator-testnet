@@ -1,0 +1,4 @@
+---
+nulink_operator_address: '{{ lookup("passwordstore", "wallets/nulink/keystore/public-key")}}'
+nulink_keystore_password: '{{ lookup("passwordstore", "wallets/nulink/keystore/password")}}'
+nulink_account_created: False

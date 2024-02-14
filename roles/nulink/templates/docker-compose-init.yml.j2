@@ -1,0 +1,24 @@
+---
+#vim: ft=yml
+version: '3.7'
+services:
+  app:
+    container_name: '{{ nulink_cont_name }}'
+    image: '{{ nulink_cont_image_name }}'
+    env_file: '{{ nulink_path }}/.env'
+    restart: 'always'
+    ports:
+      - '{{ nulink_cont_port }}:{{ nulink_cont_port }}'
+    volumes:
+      - '{{ nulink_cont_vol_secrets }}:/code'
+      - '{{ nulink_cont_vol_config }}:/home/circleci/.local/share/nulink'
+    command: |
+      nulink ursula init 
+      --signer 'keystore:///code/{{ nulink_keystore_filename }}'
+      --eth-provider {{ nulink_config_eth_provider }} 
+      --network {{ nulink_config_network }}
+      --payment-provider {{ nulink_config_payement_provider }}
+      --payment-network {{ nulink_config_payement_network }}
+      --operator-address {{ nulink_operator_address | mandatory }}
+      --max-gas-price {{ nulink_config_max_gas_price }}
+      --rest-host {{ ansible_host }}
