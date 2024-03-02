@@ -12,5 +12,13 @@ services:
     volumes:
       - '{{ nulink_cont_vol_secrets }}:/code'
       - '{{ nulink_cont_vol_config }}:/home/circleci/.local/share/nulink'
+    deploy:
+      resources:
+        limits:
+          cpus: '{{ nulink_cont_resource.limit.cpus }}'
+          memory: '{{ nulink_cont_resource.limit.memory }}'
+        reservations:
+          cpus: '{{ nulink_cont_resource.reservations.cpus }}'
+          memory: '{{ nulink_cont_resource.reservations.memory }}'
     command: |
       nulink ursula run --no-block-until-ready

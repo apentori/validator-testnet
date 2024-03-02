@@ -10,7 +10,14 @@ nulink_cont_image_name: 'nulink/nulink:{{ nulink_cont_version }}'
 nulink_cont_port: 9151
 nulink_cont_vol_secrets: '{{ nulink_path }}/secrets'
 nulink_cont_vol_config: '{{ nulink_path }}/config'
- # Keystore 
+nulink_cont_resource:
+  limit:
+    cpus: '1.5'
+    memory: '2G'
+  reservations:
+    cpus: '1'
+    memory: '1G'
+# Keystore 
 nulink_keystore_filename: 'keystore-{{ nulink_operator_address | mandatory }}'
 # nulink_operator_address: ''
 #nulink_keystore_content: Content of the keystore
